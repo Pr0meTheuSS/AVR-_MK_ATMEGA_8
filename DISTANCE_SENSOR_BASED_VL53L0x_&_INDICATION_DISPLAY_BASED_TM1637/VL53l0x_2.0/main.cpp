@@ -13,8 +13,8 @@
 
 
 void I2C_init(void){
-	TWSR=(0<<TWPS1)|(0<<TWPS0);// Ì‡ÒÚÓÈÍ‡ ‰ÂÎËÚÂÎˇ
-	TWBR=0x20; // Ì‡ÒÚÓÈÍ‡ ‡·Ó˜ÂÈ ˜‡ÒÚÓÚ˚ ¯ËÌ˚
+	TWSR=(0<<TWPS1)|(0<<TWPS0); 
+	TWBR=0x20; // 
 }
 
 
@@ -63,11 +63,7 @@ void print(unsigned int value){
 	indication(value);
 	_delay_ms(2000);
 }
-
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//25.03.2021_ Ò‰ÂÎ‡Î ‚ÂÒË˛, ÒÔÓÒÓ·ÌÛ˛ ‚˚‚Ó‰ËÚ¸ ËÌÙÓÏ‡ˆË˛ Ó ‰ËÒÚ‡ÌˆËË ‰Ó Ó·˙ÂÍÚ‡ 
-//‚ ÏËÎÎËÏÂÚ‡ı Ò ÚÓ˜ÌÓÒÚ¸˛ ‰Ó Ò‡ÌÚËÏÂÚ‡
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// –§—É–Ω–∫—Ü–∏—è –¥–ª—è –ø—Ä–µ–æ–±—Ä–∞–∑–æ–≤–∞–Ω–∏—è –ø–æ–∫–∞–∑–∞–Ω–∏–π –¥–∞—Ç—á–∏–∫–∞ VL53L0x –≤ –º–∏–ª–ª–∏–º–µ—Ç—Ä—ã
 unsigned int VL53L0x_result_mm(uint8_t data[]){
 	unsigned int result = 0;
 	if (data[0] == 0){
@@ -91,8 +87,10 @@ uint8_t Abs(uint8_t val_1, uint8_t val_2){
 
 int main(void)
 {
+	// –º–∞—Å—Å–∏–≤ —Å –¥–∞–Ω–Ω—ã–º–∏ –∏–∑–º–µ—Ä–µ–Ω–∏–π 
 	uint8_t data[2];
 	uint8_t new_data = 0;
+
 	I2C_init();
     while (1) 
     {
@@ -100,7 +98,6 @@ int main(void)
 		// VL53l0x i2c to write
 		I2C_SendByte(0x52);
 		// VL53l0x register 0x0 in condition 01 ~ START Measurement
-
 		I2C_SendByte(0x0);
 		I2C_SendByte(0x1);
 		I2C_Stop();
@@ -111,15 +108,18 @@ int main(void)
 		I2C_SendByte(30);
 		
 		I2C_Start();
+	    	// Send 0x53 - start reading mode for VL53L0x
 		I2C_SendByte(0x53);
-		
+		// Reading 2 bytes with measurement data
 		data[0] = I2C_ReadByte();
 		new_data = I2C_ReadLastByte();
+	    	// –ü—Ä–∏ –∏–∑–º–µ–Ω–µ–Ω–∏–∏ –ø–æ–∫–∞–∑–∞–Ω–∏–π –Ω–∞ –æ—á–µ—Ä–µ–¥–Ω–æ–π –∏—Ç–µ—Ä–∞—Ü–∏–∏ –∏–∑–º–µ—Ä–µ–Ω–∏–π –±–æ–ª–µ–µ —á–µ–º –Ω–∞ 5 –º–∏–ª–ª–∏–º–µ—Ç—Ä–æ–≤ 
 		if (Abs(data[1], new_data) > 5){
 			data[1] = new_data;
 		}
+	    	// –í—ã–≤–æ–¥ –¥–∞–Ω–Ω—ã—Ö –Ω–∞ 4-—Ö —Ä–∞–∑—Ä—è–¥–Ω—ã–π 7-—Å–µ–≥–º–µ–Ω—Ç—ã–π –∏–Ω–¥–∏–∫–∞—Ç–æ—Ä –Ω–∞ –¥—Ä–∞–π–≤–µ—Ä–µ TM 1637 —á–µ—Ä–µ–∑ —Ñ—É–Ω–∫—Ü–∏—é —Å–ø–µ—Ü–∏–∞–ª—å–Ω–æ–π –±–∏–±–ª–∏–æ—Ç–µ–∫–∏ 
 		indication(VL53L0x_result_mm(data));
-		I2C_Stop();
+	    	I2C_Stop();
 	}
 }
 
